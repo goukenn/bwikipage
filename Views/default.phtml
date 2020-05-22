@@ -3,21 +3,7 @@ use function igk_resources_gets as __;
 igk_google_addfont($doc, "Roboto");
 $t->clearChilds()->setClass("+google-Roboto");
 $lmenu = $t->addDiv()->setClass("wiki-lmenu");
-
- function igk_html_node_menu($tab, $callback=null){
-     $ul = igk_createnode("ul");
-     if (is_array($tab)){
-         foreach($tab as $i=>$v){
-            $li = $ul->addLi()->setClass("m-l");
-            if ($callback)
-                $callback(1, $li);
-            $li->addA($v["uri"])->Content = $v["text"];    
-         }
-     }
-     return $ul;
- }
-
- $content = "";
+$content = "";
 
  if (igk_app()->server->method("POST") && ($s = igk_getr("search"))){
     $content = __("No Result");
