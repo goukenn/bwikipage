@@ -1,0 +1,63 @@
+<?php
+use function igk_resources_gets as __; 
+igk_google_addfont($doc, "Roboto");
+$t->clearChilds()->setClass("+google-Roboto");
+$lmenu = $t->addDiv()->setClass("wiki-lmenu");
+
+ function igk_html_node_menu($tab, $callback=null){
+     $ul = igk_createnode("ul");
+     if (is_array($tab)){
+         foreach($tab as $i=>$v){
+            $li = $ul->addLi()->setClass("m-l");
+            if ($callback)
+                $callback(1, $li);
+            $li->addA($v["uri"])->Content = $v["text"];    
+         }
+     }
+     return $ul;
+ }
+
+ $content = "";
+
+ if (igk_app()->server->method("POST") && ($s = igk_getr("search"))){
+    $content = __("No Result");
+ }  else {
+
+
+ if ($params){
+    $ufile = implode("/", $params);
+    $f = $this->getArticle($ufile);   
+    if (file_exists($f)){
+        $this->loader->view($f, $this->getArticleData($f));
+        $content = $this->loader->getOut();
+    }
+}
+
+ }
+
+
+$top = $lmenu->addDiv()->setClass("wiki-logo-search");
+$top->addH3()->Content = "BALAFON<span style=\"font-weight:100\">Wiki</span>";
+$top->addForm()->addFields([
+    "search"=>["type"=>"text", "placeholder"=>__("Search docs") ]
+]);
+$cmenu = $lmenu->addDiv()->setClass("view");
+$menus = [
+    ["text"=>__("Welcome to Balafon"), "uri"=>"welcome"],
+    ["text"=>__("Installation"), "uri"=>"install"],
+    ["text"=>__("Build your first project"), "uri"=>"#"],
+    ["text"=>__("Styling"), "uri"=>"#"],
+    ["text"=>__("Articles Binding"), "uri"=>"#"],
+    ["text"=>__("View Binding"), "uri"=>"#"],
+    ["text"=>__("Data adapters"), "uri"=>"#"],
+    ["text"=>__("Development"), "uri"=>"#"],
+    ["text"=>__("Versions"), "uri"=>"version.html"],
+    ["text"=>__("License"), "uri"=>"license.html"]
+];
+
+$cmenu->addMenu($menus)->setClass("menu-list");
+
+$t->addDiv()->setClass("wiki-content")->setContent($content);
+
+$t->addDiv()->setClass("wiki-footer fitw alignc loc_b posab")->addDiv()->Content = "igkdev @ ".date("Y");
+
